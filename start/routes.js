@@ -20,4 +20,5 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
 
-Route.resource('/portfolio', 'PortfolioController')
+Route.resource('/portfolios', 'PortfolioController')
+Route.resource('/technologies', 'TechnologyController')
