@@ -49,11 +49,24 @@ class TechnologyController {
     await technology.save()
 
     return response.status(201).json({
-      data: technology
+      message: `Successfully updated technology`
     })
   }
 
-  async destroy ({ params, request, response }) {
+  async destroy ({ params: { id }, response }) {
+    const technology = await Technology.find(id)
+
+    if (!technology) {
+      return response.status(404).json({
+        data: "Data not found"
+      })
+    }
+
+    await technology.delete()
+
+    return response.status(201).json({
+      message: `Successfully deleted technology`
+    })
   }
 }
 
