@@ -12,6 +12,13 @@ class TechnologyController {
   }
 
   async store ({ request, response }) {
+    const { name } = request.post()
+
+    const technology = await Technology.create({ name })
+
+    return response.status(201).json({
+      data: technology
+    })
   }
 
   async show ({ params, request, response, view }) {
