@@ -1,92 +1,73 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with socials
- */
+const Social = use('App/Models/Social')
 class SocialController {
-  /**
-   * Show a list of all socials.
-   * GET socials
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index ({ response }) {
+    const technologies = await Social.all()
+
+    return response.status(200).json({
+      data: technologies
+    })
   }
 
-  /**
-   * Render a form to be used for creating a new social.
-   * GET socials/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new social.
-   * POST socials
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async store ({ request, response }) {
+    const { name, link, picture } = request.post()
+
+    const social = await Social.create({ name, link, picture })
+
+    return response.status(201).json({
+      data: social
+    })
   }
 
-  /**
-   * Display a single social.
-   * GET socials/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async show ({ params: { id }, request, response, view }) {
+    const social = await Social.find(id)
+
+    if (!social) {
+      return response.status(404).json({
+        data: "Data not found"
+      })
+    }
+
+    return response.status(201).json({
+      data: social
+    })
   }
 
-  /**
-   * Render a form to update an existing social.
-   * GET socials/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  async update ({ params: { id }, request, response }) {
+    const { name, link, picture } = request.post()
+    const social = await Social.find(id)
+
+    if (!social) {
+      return response.status(404).json({
+        data: "Data not found"
+      })
+    }
+
+    social.name = name
+    social.link = link
+    social.picture = picture
+    await social.save()
+
+    return response.status(201).json({
+      message: `Successfully updated social`
+    })
   }
 
-  /**
-   * Update social details.
-   * PUT or PATCH socials/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
+  async destroy ({ params: { id }, response }) {
+    const social = await Social.find(id)
 
-  /**
-   * Delete a social with id.
-   * DELETE socials/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    if (!social) {
+      return response.status(404).json({
+        data: "Data not found"
+      })
+    }
+
+    await social.delete()
+
+    return response.status(201).json({
+      message: `Successfully deleted social`
+    })
   }
 }
 
