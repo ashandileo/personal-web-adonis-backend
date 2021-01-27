@@ -7,6 +7,7 @@ class MeSchema extends Schema {
   up () {
     this.create('us', (table) => {
       table.increments()
+      table.string('content')
       table.timestamps()
     })
   }

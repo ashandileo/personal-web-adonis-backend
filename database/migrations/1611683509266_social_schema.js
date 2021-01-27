@@ -7,6 +7,9 @@ class SocialSchema extends Schema {
   up () {
     this.create('socials', (table) => {
       table.increments()
+      table.string('name')
+      table.string('link')
+      table.string('picture')
       table.timestamps()
     })
   }

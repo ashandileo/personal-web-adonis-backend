@@ -7,6 +7,8 @@ class SkillSchema extends Schema {
   up () {
     this.create('skills', (table) => {
       table.increments()
+      table.string('name')
+      table.string('picture')
       table.timestamps()
     })
   }
