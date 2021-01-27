@@ -35,7 +35,22 @@ class TechnologyController {
     })
   }
 
-  async update ({ params, request, response }) {
+  async update ({ params: { id }, request, response }) {
+    const { name } = request.post()
+    const technology = await Technology.find(id)
+
+    if (!technology) {
+      return response.status(404).json({
+        data: "Data not found"
+      })
+    }
+
+    technology.name = name
+    await technology.save()
+
+    return response.status(201).json({
+      data: technology
+    })
   }
 
   async destroy ({ params, request, response }) {
