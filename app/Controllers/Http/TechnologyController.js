@@ -21,7 +21,18 @@ class TechnologyController {
     })
   }
 
-  async show ({ params, request, response, view }) {
+  async show ({ params: { id }, request, response, view }) {
+    const technology = await Technology.find(id)
+
+    if (!technology) {
+      return response.status(404).json({
+        data: "Data not found"
+      })
+    }
+
+    return response.status(201).json({
+      data: technology
+    })
   }
 
   async update ({ params, request, response }) {
