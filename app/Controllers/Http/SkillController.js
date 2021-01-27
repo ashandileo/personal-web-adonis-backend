@@ -1,92 +1,72 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with skills
- */
+const Skill = use('App/Models/Skill')
 class SkillController {
-  /**
-   * Show a list of all skills.
-   * GET skills
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index ({ response }) {
+    const skills = await Skill.all()
+
+    return response.status(200).json({
+      data: skills
+    })
   }
 
-  /**
-   * Render a form to be used for creating a new skill.
-   * GET skills/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new skill.
-   * POST skills
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async store ({ request, response }) {
+    const { name, picture } = request.post()
+
+    const skill = await Skill.create({ name, picture })
+
+    return response.status(201).json({
+      data: skill
+    })
   }
 
-  /**
-   * Display a single skill.
-   * GET skills/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async show ({ params: { id }, request, response, view }) {
+    const skill = await Skill.find(id)
+
+    if (!skill) {
+      return response.status(404).json({
+        data: "Data not found"
+      })
+    }
+
+    return response.status(201).json({
+      data: skill
+    })
   }
 
-  /**
-   * Render a form to update an existing skill.
-   * GET skills/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  async update ({ params: { id }, request, response }) {
+    const { name, picture } = request.post()
+    const skill = await Skill.find(id)
+
+    if (!skill) {
+      return response.status(404).json({
+        data: "Data not found"
+      })
+    }
+
+    skill.name = name
+    skill.picture = picture
+    await skill.save()
+
+    return response.status(201).json({
+      message: `Successfully updated skill`
+    })
   }
 
-  /**
-   * Update skill details.
-   * PUT or PATCH skills/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
+  async destroy ({ params: { id }, response }) {
+    const skill = await Skill.find(id)
 
-  /**
-   * Delete a skill with id.
-   * DELETE skills/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    if (!skill) {
+      return response.status(404).json({
+        data: "Data not found"
+      })
+    }
+
+    await skill.delete()
+
+    return response.status(201).json({
+      message: `Successfully deleted skill`
+    })
   }
 }
 

@@ -3,10 +3,10 @@
 const Social = use('App/Models/Social')
 class SocialController {
   async index ({ response }) {
-    const technologies = await Social.all()
+    const social = await Social.all()
 
     return response.status(200).json({
-      data: technologies
+      data: social
     })
   }
 

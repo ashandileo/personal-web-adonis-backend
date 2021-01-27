@@ -22,6 +22,6 @@ Route.get('/', () => {
 
 Route.resource('/portfolios', 'PortfolioController')
 Route.resource('/technologies', 'TechnologyController')
-Route.resource('/skills', 'SkillsController')
+Route.resource('/skills', 'SkillController')
 Route.resource('/social', 'SocialController')
 Route.resource('/me', 'MeController')
