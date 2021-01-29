@@ -35,7 +35,7 @@ class SkillController {
   }
 
   async update ({ params: { id }, request, response }) {
-    const { name, picture } = request.post()
+    const { name, picture, picture_name } = request.post()
     const skill = await Skill.find(id)
 
     if (!skill) {
@@ -46,6 +46,7 @@ class SkillController {
 
     skill.name = name
     skill.picture = picture
+    skill.picture_name = picture_name
     await skill.save()
 
     return response.status(201).json({
