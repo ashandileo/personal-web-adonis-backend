@@ -25,3 +25,5 @@ Route.resource('/technologies', 'TechnologyController')
 Route.resource('/skills', 'SkillController')
 Route.resource('/social', 'SocialController')
 Route.resource('/me', 'MeController')
+
+Route.post('/upload', 'UploadController.upload')
