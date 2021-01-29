@@ -11,9 +11,9 @@ class SkillController {
   }
 
   async store ({ request, response }) {
-    const { name, picture } = request.post()
+    const { name, picture, picture_name } = request.post()
 
-    const skill = await Skill.create({ name, picture })
+    const skill = await Skill.create({ name, picture, picture_name })
 
     return response.status(201).json({
       data: skill
