@@ -7,7 +7,6 @@ class PortfolioSchema extends Schema {
   up () {
     this.create('portfolios', (table) => {
       table.increments()
-      table.string('picture')
       table.string('title')
       table.text('content')
       table.timestamps()

@@ -9,6 +9,11 @@ class Portfolio extends Model {
       .belongsToMany('App/Models/Technology')
       .pivotModel('App/Models/PortfolioTechnology')
   }
+
+  portfolioImages () {
+    return this
+      .hasMany("App/Models/PortfolioImage")
+  }
 }
 
 module.exports = Portfolio

@@ -7,7 +7,7 @@ class PortfolioController {
   
   async index ({ response }) {
     const portfolios = await 
-      Portfolio.query().with('technologies').fetch()
+      Portfolio.query().with('technologies').with('portfolioImages').fetch()
 
     return response.status(200).json({
       data: portfolios
