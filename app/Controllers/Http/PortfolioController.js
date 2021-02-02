@@ -2,6 +2,7 @@
 
 const Portfolio = use('App/Models/Portfolio')
 const PortfolioTechnology = use('App/Models/PortfolioTechnology')
+const PortfolioImage = use('App/Models/PortfolioImage')
 
 class PortfolioController {
   
@@ -16,14 +17,22 @@ class PortfolioController {
 
 
   async store ({ request, response }) {
-    const { title, content, picture, technologies_ids } = request.post()
+    const { title, content, images, technologies_ids } = request.post()
     
-    const portfolio = await Portfolio.create({ title, content, picture })
+    const portfolio = await Portfolio.create({ title, content })
 
     technologies_ids.length > 0 && technologies_ids.map(async id => {
       await PortfolioTechnology.create({
         portfolio_id: portfolio.id,
         technology_id: id
+      })
+    })
+
+    images.length > 0 && images.map(async image => {
+      await PortfolioImage.create({
+        picture_url: image.picture_url,
+        picture_name: image.picture_name,
+        portfolio_id: portfolio.id
       })
     })
 
@@ -51,7 +60,7 @@ class PortfolioController {
 
 
   async update ({ params: { id }, request, response }) {
-    const { title, content, picture, technologies_ids } = request.post()
+    const { title, content, images, technologies_ids } = request.post()
     const portfolio = await Portfolio.find(id)
 
     if (!portfolio) {
@@ -61,16 +70,24 @@ class PortfolioController {
     }
 
     await portfolio.technologies().detach()
+    await portfolio.portfolioImages().detach()
 
     portfolio.title = title
     portfolio.content = content
-    portfolio.picture = picture
     await portfolio.save()
     
     technologies_ids.length > 0 && technologies_ids.map(async id => {
       await PortfolioTechnology.create({
         portfolio_id: portfolio.id,
         technology_id: id
+      })
+    })
+
+    images.length > 0 && images.map(async image => {
+      await PortfolioImage.create({
+        picture_url: image.picture_url,
+        picture_name: image.picture_name,
+        portfolio_id: portfolio.id
       })
     })
 
