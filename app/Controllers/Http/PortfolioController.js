@@ -51,6 +51,7 @@ class PortfolioController {
       .query()
       .where('id', id)
       .with('technologies')
+      .with('portfolioImages')
       .first()
 
     return response.status(200).json({
